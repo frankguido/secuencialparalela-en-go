@@ -4,13 +4,22 @@ package main
 //para controlar los tiempos
 import (
 	"fmt"
+	"log"
+	"sync"
 	"time"
 )
 
+var wg sync.WaitGroup
+
 // go palabra reservada para las goroutine
 func main() {
+	start := time.Now()
+	wg.Add(2)
 	go name("Guido")
 	go name("Juan")
+	wg.Wait()
+	elapsed := time.Since(start)
+	log.Printf("tiempo transcurrido", elapsed)
 	fmt.Scanln()
 
 }
@@ -21,4 +30,6 @@ func name(item string) {
 		time.Sleep(time.Second / 3)
 		fmt.Println(item, i)
 	}
+	wg.Done()
 }
+
